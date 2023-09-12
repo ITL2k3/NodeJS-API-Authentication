@@ -13,6 +13,9 @@ app.get('/',(req,res,next) => {
     res.send('Home page')
 })
 
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
+
 app.use('/user',UserRoute)
 
 app.use((req,res,next) => {

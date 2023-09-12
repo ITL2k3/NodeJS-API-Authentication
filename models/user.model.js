@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
-const schema = mongoose.Schema()
+const {Schema} = require('mongoose')
+const {testConnection, UserConnection} = require('../helpers/connections_multi_mongodb')
 
-const UseSchema = new schema ({
+const UseSchema = new Schema ({
     username: {
         type: String,
         lowercase: true,
@@ -14,4 +15,7 @@ const UseSchema = new schema ({
     }
 })
 
-module.exports = mongoose.model('user', UseSchema)
+
+
+
+module.exports = testConnection.model('users',UseSchema)
