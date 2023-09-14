@@ -38,8 +38,30 @@ route.post('/register', async (req,res,next) => {
 route.post('/refresh-token',(req,res,next) => {
     res.send('function refresh-token')
 })
-route.post('/login',(req,res,next) => {
-    res.send('function login')
+route.post('/login',async (req,res,next) => {
+    try{
+        const {error} = userValidate(req.body)
+        if(error){
+            throw createError(error.details[0].message)
+        }
+        const {email, password} = req.body
+        const user = await User.findOne({email})
+        if(!user){
+            throw createError.NotFound('email not found')
+        }
+        const isValid = await user.isCheckPassword(password)
+        if(!isValid){
+            throw createError.Unauthorized()
+        }
+        return res.json({
+            status: 'okay',
+            elements: user
+        })
+
+
+    }catch(error){
+        next(error)
+    }
 })
 
 route.post('/logout',(req,res,next) => {
