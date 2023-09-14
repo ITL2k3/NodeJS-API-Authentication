@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const {Schema} = require('mongoose')
 const {testConnection, UserConnection} = require('../helpers/connections_multi_mongodb')
-
+const bcrypt = require('bcrypt')
 const UseSchema = new Schema ({
-    username: {
+    email: {
         type: String,
         lowercase: true,
         unique: true,
@@ -12,6 +12,18 @@ const UseSchema = new Schema ({
     password: {
         type: String,
         required: true
+    }
+})
+
+UseSchema.pre('save',async function(next){
+    try{
+        console.log(`Called before save::`, this.email, this.password)
+        const salt = await bcrypt.genSalt(10)
+        const hashPassword = await bcrypt.hash(this.password, salt)
+        this.password = hashPassword
+        next()
+    }catch(error){
+        next(error)
     }
 })
 

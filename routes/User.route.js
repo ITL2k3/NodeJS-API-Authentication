@@ -17,18 +17,19 @@ route.post('/register', async (req,res,next) => {
         // }
         
         const isExits = await User.findOne({
-            username: email
+            email: email
         })
         if(isExits){
             throw createError.Conflict(`${email} is already been registered`)
         }
-        const isCreate = await User.create({
-            username: email,
+        const user = new User ({
+            email,
             password
         })
+        const savedUser = await  user.save()
         return res.json({
             status: 'okay',
-            elements: isCreate
+            elements: savedUser
         })
     }catch(error){
         next (error)
