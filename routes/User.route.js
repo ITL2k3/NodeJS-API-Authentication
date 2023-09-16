@@ -4,7 +4,7 @@ const route = express.Router()
 
 const User = require('../models/user.model')
 const {userValidate} = require('../helpers/validation')
-const { signAccessToken, verifyAccessToken } = require('../helpers/jwt_service')
+const { signAccessToken, verifyAccessToken, signRefreshToken } = require('../helpers/jwt_service')
  
 route.post('/register', async (req,res,next) => {
     try{
@@ -56,8 +56,10 @@ route.post('/login',async (req,res,next) => {
             throw createError.Unauthorized()
         }
         const accessToken = await signAccessToken(user._id)
+        const refresToken = await signRefreshToken(user._id)
         return res.json({
-            accessToken
+            accessToken,
+            refresToken
         })
 
 
