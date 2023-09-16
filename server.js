@@ -7,8 +7,7 @@ const app = express()
 
 require('dotenv').config()
 require('./helpers/connections_mongodb')
-const client = require('./helpers/connections_redis')
-client.set('foo','anonu')
+
 
 
 app.get('/',(req,res,next) => {
